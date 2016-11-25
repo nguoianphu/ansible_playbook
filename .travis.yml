@@ -1,0 +1,16 @@
+sudo: required
+services:
+  - docker
+
+script:
+  - echo "Build local image"
+  - docker build -t ansible_playbook .
+  - docker images
+  - echo "Run local image"
+  - docker-compose -f docker-compose-dev.yml run --rm ansible remote.yml -i production
+  - docker ps -a
+  - docker rm -v -f ansible_target
+  - echo "Testing public image on Docker Hub"
+  - docker-compose run --rm ansible remote.yml -i production
+  - docker ps -a
+  - docker rm -v -f ansible_target

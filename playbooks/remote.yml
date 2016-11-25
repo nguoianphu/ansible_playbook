@@ -1,5 +1,5 @@
 ---
-- hosts: test
+- hosts: target_servers
   remote_user: ubuntu
   become: yes
   become_user: root

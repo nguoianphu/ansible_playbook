@@ -1,15 +1,24 @@
 # Ansible Playbook Docker Image
 
+[![Build Status](https://travis-ci.org/nguoianphu/ansible_playbook.svg?branch=master)](https://travis-ci.org/nguoianphu/ansible_playbook) [![Image size](https://images.microbadger.com/badges/image/nguoianphu/ansible_playbook.svg)](https://microbadger.com/images/nguoianphu/ansible_playbook "Get your own image badge on microbadger.com")
+
+## Build
+
+    docker build -t ansible_playbook .
+
+
+## Run
+
 Executes ansible-playbook command against an externally mounted set of Ansible playbooks
 
 ```
-docker run --rm -it -v PATH_TO_LOCAL_PLAYBOOKS_DIR:/ansible/playbooks philm/ansible_playbook PLAYBOOK_FILE
+docker run --rm -it -v PATH_TO_LOCAL_PLAYBOOKS_DIR:/ansible/playbooks ansible_playbook PLAYBOOK_FILE
 ```
 
 For example, assuming your project's structure follows [best practices](http://docs.ansible.com/ansible/playbooks_best_practices.html#directory-layout), the command to run ansible-playbook from the top-level directory would look like:
 
 ```
-docker run --rm -it -v $(pwd):/ansible/playbooks philm/ansible_playbook site.yml
+docker run --rm -it -v $(pwd):/ansible/playbooks ansible_playbook site.yml
 ```
 
 Ansible playbook variables can simply be added after the playbook name.
@@ -23,7 +32,7 @@ docker run --rm -it \
     -v ~/.ssh/id_rsa:/root/.ssh/id_rsa \
     -v ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub \
     -v $(pwd):/ansible/playbooks \
-    philm/ansible_playbook site.yml
+    ansible_playbook site.yml
 ```
 
 ## Ansible Vault
@@ -33,13 +42,13 @@ If you've encrypted any data using [Ansible Vault](http://docs.ansible.com/ansib
 ```
 docker run --rm -it -v $(pwd):/ansible/playbooks \
     -v ~/.vault_pass.txt:/root/.vault_pass.txt \
-    philm/ansible_playbook site.yml --vault-password-file /root/.vault_pass.txt
+    ansible_playbook site.yml --vault-password-file /root/.vault_pass.txt
 ```                    
 
 Note: the Ansible Vault executable is embedded in this image. To use it, specify a different entrypoint:
 
 ```
-docker run --rm -it -v $(pwd):/ansible/playbooks --entrypoint ansible-vault philm/ansible_playbook encrypt FILENAME
+docker run --rm -it -v $(pwd):/ansible/playbooks --entrypoint ansible-vault ansible_playbook encrypt FILENAME
 ```
 
 ## Testing Playbooks - Ansible Target Container
@@ -49,14 +58,14 @@ The [Ansible Target Docker image](https://github.com/philm/ansible_target) is an
 First, define your inventory file.
 
 ```
-[test]
+[target_servers]
 ansible_target
 ```
 
 Be sure your testing playbooks include the correct host and remote user:
 
 ```
-- hosts: test
+- hosts: target_servers
   remote_user: ubuntu
 
   tasks:
@@ -66,12 +75,19 @@ Be sure your testing playbooks include the correct host and remote user:
 When testing the playbook, you'll need to link the two containers:
 
 ```
+
+docker run -d -p 2222:22 \
+    --name ansible_target \
+    -v ~/.ssh/id_rsa.pub:/home/ubuntu/.ssh/authorized_keys \
+    philm/ansible_target:latest
+
+    
 docker run --rm -it \
     --link ansible_target \
     -v ~/.ssh/id_rsa:/root/.ssh/id_rsa \
     -v ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub \
     -v $(pwd):/ansible/playbooks \
-    philm/ansible_playbook tests.yml -i inventory
+    ansible_playbook tests.yml -i inventory
 ```
 
 Note: the SSH key used above should match the one used to run Ansible Target.
@@ -82,7 +98,7 @@ An sample *docker-compose.yml* file is in this repo's test directory.
 
 Example:
 ```
-docker-compose run --rm test remote.yml -i inventory
+docker-compose -f docker-compose-dev.yml run --rm ansible remote.yml -i production
 ```
 
 And if you'd like the ansible_target container to be recreated each time, do:

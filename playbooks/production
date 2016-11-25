@@ -1,0 +1,4 @@
+# file: production
+
+[target_servers]
+ansible_target
