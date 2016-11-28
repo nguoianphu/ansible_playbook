@@ -32,9 +32,9 @@ RUN set -x \
     # && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
     && git clone git://github.com/ansible/ansible.git --recursive \
     && cd ./ansible \
-    # && git submodule update --init --recursive \
     && source ./hacking/env-setup \
     && pip install paramiko PyYAML Jinja2 httplib2 six \
+    && git submodule update --init --recursive \    
     && ansible all -m pings \
     && mkdir -p /ansible/playbooks
 
