@@ -4,6 +4,8 @@ FROM alpine:3.4
 
 MAINTAINER Tuan Vo <vohungtuan@gmail.com>
 
+ENV ANSIBLE_VERSION v2.2.1.0-0.1.rc1
+
 RUN set -x \
  && apk add --update bash \
                      curl \
@@ -19,12 +21,13 @@ RUN set -x \
                      py-setuptools \
                      py-yaml \
                      tar \
+                     git \
     && pip install --upgrade pip python-keyczar \
     && rm -rf /var/cache/apk/* \
     && mkdir /etc/ansible/ /ansible \
     && echo "[local]" >> /etc/ansible/hosts \
     && echo "localhost" >> /etc/ansible/hosts \
-    && curl -fsSL https://github.com/ansible/ansible/archive/v2.2.1.0-0.1.rc1.tar.gz -o ansible.tar.gz \
+    && curl -fsSL https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz \
     && tar -xzf ansible.tar.gz -C ansible --strip-components 1 \
     && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
     && mkdir -p /ansible/playbooks

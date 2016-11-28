@@ -3,7 +3,7 @@ version: '2'
 services:
 
     target_servers:
-        image: philm/ansible_target:ubuntu1404
+        image: philm/ansible_target
         container_name: ansible_target
         expose:
             - "22"
@@ -13,6 +13,7 @@ services:
 
     ansible:
         image: nguoianphu/ansible_playbook
+        command: "remote.yml -i production"
         volumes:
             - ./id_rsa:/root/.ssh/id_rsa
             - ./id_rsa.pub:/root/.ssh/id_rsa.pub

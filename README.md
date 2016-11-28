@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/nguoianphu/ansible_playbook.svg?branch=master)](https://travis-ci.org/nguoianphu/ansible_playbook) [![Image size](https://images.microbadger.com/badges/image/nguoianphu/ansible_playbook.svg)](https://microbadger.com/images/nguoianphu/ansible_playbook "Get your own image badge on microbadger.com")
 
+## Ansible v2.2.1.0-0.1.rc1
+
 ## Build
 
     docker build -t ansible_playbook .
