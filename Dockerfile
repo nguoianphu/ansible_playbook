@@ -30,7 +30,7 @@ RUN set -x \
     # && curl -fsSL https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz \
     # && tar -xzf ansible.tar.gz -C ansible --strip-components 1 \
     # && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
-    && git clone git://github.com/ansible/ansible.git --recursive
+    && git clone git://github.com/ansible/ansible.git --recursive \
     && cd ./ansible \
     # && git submodule update --init --recursive \
     && source ./hacking/env-setup \
