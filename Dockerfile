@@ -27,16 +27,15 @@ RUN set -x \
     && mkdir /etc/ansible/ /ansible \
     && echo "[local]" >> /etc/ansible/hosts \
     && echo "localhost" >> /etc/ansible/hosts \
-    && curl -fsSL https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz \
-    && tar -xzf ansible.tar.gz -C ansible --strip-components 1 \
-    && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
-    && cd ansible \
-    && git submodule update --init --recursive \
+    # && curl -fsSL https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz \
+    # && tar -xzf ansible.tar.gz -C ansible --strip-components 1 \
+    # && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
+    && git clone git://github.com/ansible/ansible.git --recursive
+    && cd ./ansible \
+    # && git submodule update --init --recursive \
     && source ./hacking/env-setup \
     && pip install paramiko PyYAML Jinja2 httplib2 six \
-    && echo "127.0.0.1" > ~/ansible_hosts \
-    && export ANSIBLE_INVENTORY=~/ansible_hosts \
-    && ansible all -m ping --ask-pass
+    && ansible all -m pings \
     && mkdir -p /ansible/playbooks
 
 # COPY docker-entrypoint.sh /
