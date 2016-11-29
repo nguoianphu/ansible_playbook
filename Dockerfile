@@ -22,7 +22,7 @@ RUN set -x \
                      py-yaml \
                      tar \
                      git \
-                     ansible \
+                     # ansible \
     && pip install --upgrade pip python-keyczar \
     && pip install paramiko PyYAML Jinja2 httplib2 six \
                    # ansible \
@@ -34,11 +34,12 @@ RUN set -x \
     # && curl -fsSL https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz \
     # && tar -xzf ansible.tar.gz -C ansible --strip-components 1 \
     # && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
-    # && git clone git://github.com/ansible/ansible.git --recursive \
-    # && cd ./ansible \
-    # && source ./hacking/env-setup \
-    # && git pull --rebase \
-    # && git submodule update --init --recursive \
+    && git clone git://github.com/ansible/ansible.git --recursive \
+    && cd ./ansible \
+    && source ./hacking/env-setup \
+    && git pull --rebase \
+    && git submodule update --init --recursive \
+    && make install
     && ansible all -m pings \
     && mkdir -p /ansible/playbooks
 
