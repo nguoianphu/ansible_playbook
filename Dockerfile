@@ -22,12 +22,15 @@ RUN set -x \
                      py-yaml \
                      tar \
                      git \
+                     ansible \
     && pip install --upgrade pip python-keyczar \
-    && pip install paramiko PyYAML Jinja2 httplib2 six ansible \
+    && pip install paramiko PyYAML Jinja2 httplib2 six \
+                   # ansible \
     && rm -rf /var/cache/apk/* \
     && mkdir /etc/ansible/ /ansible \
     && echo "[local]" >> /etc/ansible/hosts \
     && echo "localhost" >> /etc/ansible/hosts \
+    && echo "127.0.0.1" >> /etc/ansible/hosts \
     # && curl -fsSL https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz \
     # && tar -xzf ansible.tar.gz -C ansible --strip-components 1 \
     # && rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging \
