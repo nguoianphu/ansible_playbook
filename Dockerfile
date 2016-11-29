@@ -40,7 +40,7 @@ RUN set -x \
     && source ./hacking/env-setup \
     && git pull --rebase \
     && git submodule update --init --recursive \
-    && make install
+    && make && make install \
     && ansible all -m pings \
     && mkdir -p /ansible/playbooks
 
