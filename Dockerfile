@@ -22,6 +22,7 @@ RUN set -x \
                      py-yaml \
                      tar \
                      git \
+                     make \
                      # ansible \
     && pip install --upgrade pip python-keyczar \
     && pip install paramiko PyYAML Jinja2 httplib2 six \
