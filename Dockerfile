@@ -34,6 +34,7 @@ RUN set -x \
     && cd ./ansible \
     && source ./hacking/env-setup \
     && pip install paramiko PyYAML Jinja2 httplib2 six \
+    && git pull --rebase \
     && git submodule update --init --recursive \    
     && ansible all -m pings \
     && mkdir -p /ansible/playbooks
